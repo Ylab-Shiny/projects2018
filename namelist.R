@@ -1,4 +1,4 @@
-### Name list ###
+### 名簿 ###
 # M1 Sahashi
 # D4 Nasu
 # D4 Doshita
