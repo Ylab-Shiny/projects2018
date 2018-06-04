@@ -6,15 +6,16 @@ library(mice)
 ### ディレクトリ設定 ###
 user.dir <- Sys.getenv("USERPROFILE")
 docu <- paste0(user.dir, "\\Documents\\")
-setwd(docu)
+dropbox <- paste0(user.dir, 
+                  "\\Dropbox\\Yamaha-lab\\0_semi\\2018Temp\\卒研ミニプロジェクト\\Shinyチーム\\")
+setwd(dropbox)
 
 # データの読み込み
-ds <- read_csv("dataset_2017.csv", col_names = F, skip = 1)
-ds2 <- read_csv("dataset_2017.csv")
-cnames <- read_csv("dataset_2017.csv", col_names = F, n_max = 1)
+ds <- read_csv("dataset_2016.csv", col_names = F, skip = 1)
+ds2 <- read_csv("dataset_2016.csv")
+cnames <- read_csv("dataset_2016.csv", col_names = F, n_max = 1)
 ### 列ごとの平均と標準偏差を求める ###
 ms <- ds %>% summarise_each(funs(mean(., na.rm = T), sd(., na.rm = T)))
-
 
 # zスコア
 data_z <- ds %>% mutate(
@@ -128,5 +129,5 @@ complemented_df <- cbind(label = modified_ds$X1, impdf)
 names(complemented_df) <- cnames
 
 # 解析用データの保存
-write_excel_csv(modified_ds, file.path(docu, "modified_df_2017.csv"))
-write_excel_csv(complemented_df, file.path(docu, "analysis_df_2017.csv"))
+write_rds(modified_ds, file.path(docu, "modified_df_2016.rds"))
+write_rds(complemented_df, file.path(docu, "analysis_df_2016.rds"))

@@ -7,10 +7,10 @@ docu <- paste0(user.dir, "\\Documents\\")
 setwd(docu)
 
 # データの読み込み
-dataset <- read_csv("analysis_df_2017.csv")
+dataset <- read_rds("analysis_df_2017.rds")
 
 ### 部局データセットの構築 ###
-dep_df <- dataset %>% mutate(
+mutate_df <- dataset %>% mutate(
   Dep1 = dataset$`東ｷｬﾝﾊﾟｽ受電電力量　　　　　　　` + dataset$`西ｷｬﾝﾊﾟｽ受電電力量　　　　　　　`,
   Dep2 = dataset$`23号館(ﾘｻｰﾁｾﾝﾀｰ)電力量　　　　　` + dataset$`16号館方面電力量　　　　　　　　`,
   Dep3 = dataset$`ﾒﾓﾘｱﾙﾎｰﾙ電力量　　　　　　　　　` + dataset$`2号館電力量 　　　　　　　　　　` +
@@ -37,11 +37,20 @@ dep_df <- dataset %>% mutate(
   Dep16 = dataset$`図書館電力量　　　　　　　　　　` + dataset$`図書館新館電力量　　　　　　　　` +
     dataset$`図書館(空調)電力量　　　　　　　`,
   Dep17 = dataset$`24号館(総合情報ｾﾝﾀｰ)電力量　　　`,
-  date = substr(label, 1, 10),
-  hour = substr(label, 12, 19)
-) %>% select(
-  label, date, hour, starts_with("Dep")
-)
+  Temperture = dataset$`外気温度　　　　　　　　　　　　`,
+  Humidity = dataset$`外気湿度　　　　　　　　　　　　`)
+
+## 1時間ごとに集計
+# 加算
+sum_df <- mutate_df %>% group_by(label) %>% 
+  select(-c(Temperture, Humidity)) %>% summarise_each(funs(sum)) %>% 
+  select(label, starts_with("Dep"))
+# 平均
+mean_df <- mutate_df %>% group_by(label) %>% 
+  select(Temperture, Humidity) %>% summarise_each(funs(mean))
+# 結合
+dep_df <- left_join(mean_df, sum_df, by="label")
+
 
 # dep_dfの保存
-write_excel_csv(dep_df, file.path(docu, "dep_df_2017.csv"))
+write_rds(dep_df, file.path(docu, "dep_df_2017.rds"))

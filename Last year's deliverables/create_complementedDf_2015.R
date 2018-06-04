@@ -5,17 +5,17 @@ library(mice)
 
 ### ディレクトリ設定 ###
 user.dir <- Sys.getenv("USERPROFILE")
+docu <- paste0(user.dir, "\\Documents\\")
 dropbox <- paste0(user.dir, 
                   "\\Dropbox\\Yamaha-lab\\0_semi\\2018Temp\\卒研ミニプロジェクト\\Shinyチーム\\")
 setwd(dropbox)
 
 # データの読み込み
-ds <- read_csv("dataset_2017.csv", col_names = F, skip = 1)
-ds2 <- read_csv("dataset_2017.csv")
-cnames <- read_csv("dataset_2017.csv", col_names = F, n_max = 1)
+ds <- read_csv("dataset_2015.csv", col_names = F, skip = 1)
+ds2 <- read_csv("dataset_2015.csv")
+cnames <- read_csv("dataset_2015.csv", col_names = F, n_max = 1)
 ### 列ごとの平均と標準偏差を求める ###
 ms <- ds %>% summarise_each(funs(mean(., na.rm = T), sd(., na.rm = T)))
-
 
 # zスコア
 data_z <- ds %>% mutate(
@@ -69,11 +69,7 @@ data_z <- ds %>% mutate(
   z49 = (X49 - ms$X49_mean) / ms$X49_sd,
   z50 = (X50 - ms$X50_mean) / ms$X50_sd,
   z51 = (X51 - ms$X51_mean) / ms$X51_sd,
-  z52 = (X52 - ms$X52_mean) / ms$X52_sd,
-  z53 = (X53 - ms$X53_mean) / ms$X53_sd,
-  z54 = (X54 - ms$X54_mean) / ms$X54_sd,
-  z55 = (X55 - ms$X55_mean) / ms$X55_sd,
-  z56 = (X56 - ms$X56_mean) / ms$X56_sd
+  z52 = (X52 - ms$X52_mean) / ms$X52_sd
 )
 
 df_z <- data_z %>% select(starts_with("z"))
@@ -101,7 +97,7 @@ num_outliers <- breaker_report %>%
 
 
 ### 外れ値の箇所を取り出す ###
-for(i in 2:56){
+for(i in 2:52){
   eval(parse(
     text = paste0("id_", i, "<- num_outliers %>% filter(rule == 'z", i, "') %>% select(id)")
   ))
@@ -110,7 +106,7 @@ for(i in 2:56){
 ### 外れ値部分0未満のものをNAとする ###
 modified_ds <- ds
 
-for(i in 2:56){
+for(i in 2:52){
   eval(parse(
     text = paste0("modified_ds$X", i, "[id_", i, "$id] <- NA")
   ))
@@ -128,6 +124,3 @@ impdf <- complete(imp, include = F)
 complemented_df <- cbind(label = modified_ds$X1, impdf)
 names(complemented_df) <- cnames
 
-# 解析用データの保存
-write_excel_csv(modified_ds, file.path(docu, "modified_df_2017.csv"))
-write_excel_csv(complemented_df, file.path(docu, "analysis_df_2017.csv"))
