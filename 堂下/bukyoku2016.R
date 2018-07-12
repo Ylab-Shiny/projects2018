@@ -3,7 +3,7 @@ library(tidyverse)
 
 ### ディレクトリ設定 ###
 user.dir <- Sys.getenv("USERPROFILE")
-docu <- paste0(user.dir, "\\Users\\Yamaha-Lab\\Documents\\projects2018\\Prototype 1\\")
+docu <- paste0(user.dir, "\\Documents\\projects2018\\")
 setwd(docu)
 
 # データの読み込み
