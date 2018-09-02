@@ -132,3 +132,9 @@ names(complemented_df) <- cnames
 # 解析用データの保存
 write_rds(modified_ds, file.path(docu, "modified_df_2017.rds"))
 write_rds(complemented_df, file.path(docu, "analysis_df_2017.rds"))
+
+# 外れ値のベンチマーク
+me <- ms$X2_mean
+sd <- ms$X2_sd
+b_min <- me - 5*sd
+b_max <- me + 10*sd
