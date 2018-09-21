@@ -25,7 +25,7 @@ user <- Sys.getenv("USERPROFILE")
 # 2018
 path2018 <- paste0(user, "\\Dropbox\\Yamaha-lab\\user files\\Sahashi\\smartBEMS_Data\\d")
 fnames2018 <- dir(path2018)
-for(i in 1:length(fnames2018)-1) { # -1はファイル転送のシェルスクリプトがあるため
+for(i in 1:(length(fnames2018)-1)) { # -1はファイル転送のシェルスクリプトがあるため
   x <- as.Date(substr(fnames2018[i], 2, 7), "%y%m%d")
   if(i == 1) {
     dl2018 <- x
