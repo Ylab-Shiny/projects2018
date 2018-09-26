@@ -218,8 +218,12 @@ dep_2016 <- dataset %>% mutate(
   `Dep14（現代教育学部）` = `70･71号館電力量 ` + `72号館電力量`,
   `Dep15（生命健康科学部）` = `55号館電力量` + `52号館電力量` + `50･51号館電力量 `,
   `Dep16（図書館）` = 図書館電力量 + 図書館新館電力量 + `図書館(空調)電力量`,
-  `Dep17（教育支援機構）` = `24号館(総合情報ｾﾝﾀｰ)電力量`
-) %>% select(label, starts_with("Dep"))
+  `Dep17（教育支援機構）` = `24号館(総合情報ｾﾝﾀｰ)電力量`,
+  date = substr(dataset$label, 1, 10),
+  time = substr(dataset$label, 12, 20)
+) %>% select(label, date, time, starts_with("Dep"))
+# labelの型をPOSIXctに変換
+dep_2016$label <- as.POSIXct(dep_2016$label, tz = "Japan")
 
 
 # データの保存
