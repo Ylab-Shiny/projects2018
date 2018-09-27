@@ -84,12 +84,19 @@ shinyServer(function(input, output, session){
     Deplist = names(passData()[-1])
     
     selectInput(inputId = "theDeps", label = "部局を指定してください（複数選択可）",
-                Deplist, multiple = T)
+                Deplist, multiple = T, selected = Deplist[1])
   }) ### selectDepsの最終部分
+  
+  # 選択された部局のみ取り出す
+  passData3 <- reactive({
+    firstData <- passData2() %>% select(label, input$theDeps)
+    
+    return(firstData)
+  }) ### passData3の最終部分
   
   # データテーブルのアウトプット
   output$DataTable <- renderDataTable({
-    datatable(passData2(),
+    datatable(passData3(),
               options = list(
                 lengthMenu = c(10, 100, 1500),
                 pageLength = 100,
