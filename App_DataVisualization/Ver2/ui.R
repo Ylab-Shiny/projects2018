@@ -25,7 +25,10 @@ sidebar <- dashboardSidebar(
   selectInput(inputId = "Years", "表示したい年度を選択してください（複数選択不可）",
               c("2018", "2017", "2016", "2015", "2014", "2012"), multiple = F),
   # カレンダーの出力
-  uiOutput("DateRange")
+  uiOutput("DateRange"),
+  
+  # 部局選択の出力
+  uiOutput("selectDeps")
   
 ) ### sidebarの最終部分
 

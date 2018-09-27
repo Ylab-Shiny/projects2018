@@ -79,6 +79,14 @@ shinyServer(function(input, output, session){
     
   }) ### passData2の最終部分
   
+  output$selectDeps <- renderUI({
+    # 列名labelは必要ないので除外
+    Deplist = names(passData()[-1])
+    
+    selectInput(inputId = "theDeps", label = "部局を指定してください（複数選択可）",
+                Deplist, multiple = T)
+  }) ### selectDepsの最終部分
+  
   # データテーブルのアウトプット
   output$DataTable <- renderDataTable({
     datatable(passData2(),
