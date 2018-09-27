@@ -24,6 +24,10 @@ for(i in 1:(length(filenames)-1)) {
     data$X2[nrow(data)] <- as.hms("24:00:00")
   }
   
+  # 時刻を1分ずらす
+  time_lab <- as.hms(data$X2 - 60)
+  data$X2 <- time_lab
+  
   # 日付時刻ラベルの作成
   date_lab <- paste0(substr(data$X1, 1, 4), "-", 
                      substr(data$X1, 5, 6), "-",
@@ -110,6 +114,8 @@ dep_2018$`Dep15（生命健康科学部）` <- dep_2018$`Dep15（生命健康科
 dep_2018$`Dep16（図書館）` <- dep_2018$`Dep16（図書館）` / (dt/3600)
 dep_2018$`Dep17（教育支援機構）` <- dep_2018$`Dep17（教育支援機構）` / (dt/3600)
 
+# labelの型を文字列に変換
+dep_2018$label <- as.character(dep_2018$label)
 
 
 # データの保存
