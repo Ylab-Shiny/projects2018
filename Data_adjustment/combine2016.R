@@ -218,15 +218,40 @@ dep_2016 <- dataset %>% mutate(
   `Dep14（現代教育学部）` = `70･71号館電力量 ` + `72号館電力量`,
   `Dep15（生命健康科学部）` = `55号館電力量` + `52号館電力量` + `50･51号館電力量 `,
   `Dep16（図書館）` = 図書館電力量 + 図書館新館電力量 + `図書館(空調)電力量`,
-  `Dep17（教育支援機構）` = `24号館(総合情報ｾﾝﾀｰ)電力量`,
-  date = substr(dataset$label, 1, 10),
-  time = substr(dataset$label, 12, 20)
-) %>% select(label, date, time, starts_with("Dep"))
+  `Dep17（教育支援機構）` = `24号館(総合情報ｾﾝﾀｰ)電力量`
+  ) %>% select(label,  starts_with("Dep"))
 # labelの型をPOSIXctに変換
 dep_2016$label <- as.POSIXct(dep_2016$label, tz = "Japan")
+# データの差分を求める
+dt <- diff(as.numeric(dep_2016$label), differences = 1)
+# 最終行の1行分足りなくなるので60を追加
+dt <- c(dt, 1800)
+
+# データを電力消費[kW]に変換
+dep_2016$`Dep1（全学電力量）` <- dep_2016$`Dep1（全学電力量）` / (dt/3600)
+dep_2016$`Dep2（研究推進機構（東））` <- dep_2016$`Dep2（研究推進機構（東））` / (dt/3600)
+dep_2016$`Dep3（事務）` <- dep_2016$`Dep3（事務）` / (dt/3600)
+dep_2016$`Dep4（学生教育推進機構）` <- dep_2016$`Dep4（学生教育推進機構）` / (dt/3600)
+dep_2016$`Dep5（不言実行館）` <- dep_2016$`Dep5（不言実行館）` / (dt/3600)
+dep_2016$`Dep6（経営情報学部）` <- dep_2016$`Dep6（経営情報学部）` / (dt/3600)
+dep_2016$`Dep7（国際関係学部）` <- dep_2016$`Dep7（国際関係学部）` / (dt/3600)
+dep_2016$`Dep8（応用生物学部）` <- dep_2016$`Dep8（応用生物学部）` / (dt/3600)
+dep_2016$`Dep9（工学部）` <- dep_2016$`Dep9（工学部）` / (dt/3600)
+dep_2016$`Dep10（学生推進機構）` <- dep_2016$`Dep10（学生推進機構）` / (dt/3600)
+dep_2016$`Dep11（研究推進機構（西））` <- dep_2016$`Dep11（研究推進機構（西））` / (dt/3600)
+dep_2016$`Dep12（実験動物教育研究センター）` <- dep_2016$`Dep12（実験動物教育研究センター）` / (dt/3600)
+dep_2016$`Dep13（人文学部）` <- dep_2016$`Dep13（人文学部）` / (dt/3600)
+dep_2016$`Dep14（現代教育学部）` <- dep_2016$`Dep14（現代教育学部）` / (dt/3600) 
+dep_2016$`Dep15（生命健康科学部）` <- dep_2016$`Dep15（生命健康科学部）` / (dt/3600)
+dep_2016$`Dep16（図書館）` <- dep_2016$`Dep16（図書館）` / (dt/3600)
+dep_2016$`Dep17（教育支援機構）` <- dep_2016$`Dep17（教育支援機構）` / (dt/3600)
+
+# labelの型を文字列に変換
+dep_2016$label <- as.character(dep_2016$label)
 
 
 # データの保存
 save_dir <- paste0(user.dir, "\\Dropbox\\Yamaha-lab\\user files\\Sahashi\\smartBEMS_Data\\Datasets\\")
 write_excel_csv(dep_2016, file.path(save_dir, "Dataset2016.csv"))
 write_rds(dep_2016, file.path(save_dir, "Dataset2016.rds"))
+
