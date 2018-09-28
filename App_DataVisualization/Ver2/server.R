@@ -75,6 +75,9 @@ shinyServer(function(input, output, session){
       date >= input$theRange[1] & date <= input$theRange[2]
     ) %>% select(-c(date))
     
+    # labelの型をPOSIXctに変換
+    secondData$label <- as.POSIXct(secondData$label, "%Y-%m-%d %H:%M:%S", tz = "Japan")
+    
     return(secondData)
     
   }) ### passData2の最終部分
@@ -106,5 +109,34 @@ shinyServer(function(input, output, session){
                 scrollCollapse = T
               ))
   }) ### DataTableの最終部分
+  
+  # アイコン
+  # 全学電力量の最大値をアイコンとして出力
+  output$Max <- renderInfoBox({
+    
+    infoBox("全学電力量の最大電力[kW]", max(passData2()$`Dep1（全学電力量）`, na.rm = T), color = "red")
+    
+  }) ### Maxの最終部分
+  
+  # 全学電力量の最小値のアイコンとして出力
+  output$Min <- renderInfoBox({
+    
+    infoBox("全学電力量の最小電力[kW]", min(passData2()$`Dep1（全学電力量）`, na.rm = T), color = "blue")
+    
+  }) ### Minの最終部分
+  
+  # 全学電力量の平均電力をアイコンとして出力
+  output$Mean <- renderInfoBox({
+    
+    infoBox("全学電力量の平均電力消費[kW]", as.integer(mean(passData2()$`Dep1（全学電力量）`, na.rm = T)), color = "green")
+    
+  }) ### Meanの最終部分
+  
+  ## トレンドグラフ ###
+  output$trendGragh <- renderPlot({
+    
+    ggplot(passData2(), aes(x = label, y = `Dep1（全学電力量）`)) + geom_line()
+    
+    }) ### trendGraghの最終部分
   
 }) ###  shinyServerの最終部分
