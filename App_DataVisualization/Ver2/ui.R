@@ -36,7 +36,13 @@ sidebar <- dashboardSidebar(
   br(),
   
   # 部局選択の出力
-  uiOutput("selectDeps")
+  uiOutput("selectDeps"),
+  
+  # 1行改行
+  br(),
+  
+  sliderInput(inputId = "RangeY", label = "Y軸（電力消費[kW]）の範囲をを指定してください",
+              min = 0, max = 4000, value = c(0, 4000), step = 50)
   
 ) ### sidebarの最終部分
 

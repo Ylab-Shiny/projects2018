@@ -144,7 +144,7 @@ shinyServer(function(input, output, session){
   output$trendGragh <- renderPlot({
     
     ggplot(passData4(), aes(x = label, y = P_con, color = Deps)) + 
-      geom_line() + ylim(0, 4000) + xlab("時間") + ylab("部局毎の電力消費[kW]") + ggtitle("トレンドグラフ")
+      geom_line() + ylim(input$RangeY[1], input$RangeY[2]) + xlab("時間") + ylab("部局毎の電力消費[kW]") + ggtitle("トレンドグラフ")
     
     }) ### trendGraghの最終部分
   
