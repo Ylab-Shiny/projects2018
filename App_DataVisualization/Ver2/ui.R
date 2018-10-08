@@ -18,21 +18,45 @@ header <- dashboardHeader(title = "中部大学の電力消費実績描画アプ
 sidebar <- dashboardSidebar(
   # サイドバーメニュー
   sidebarMenu(
-    menuItem("データセット[kW]", tabName = "table", icon = icon("table"))
+    menuItem("データセット[kW]", tabName = "table", icon = icon("table")),
+    menuItem("トレンドグラフ", tabName = "trend", icon = icon("dashboard"),
+             badgeLabel = "ロード遅め", badgeColor = "red")
   ),
   
   # 年の選択
   selectInput(inputId = "Years", "表示したい年度を選択してください（複数選択不可）",
               c("2018", "2017", "2016", "2015", "2014", "2012"), multiple = F),
+  # 1行改行
+  br(),
+  
   # カレンダーの出力
-  uiOutput("DateRange")
+  uiOutput("DateRange"),
+  
+  # 1行改行
+  br(),
+  
+  # 部局選択の出力
+  uiOutput("selectDeps")
   
 ) ### sidebarの最終部分
 
 # body #
 body <- dashboardBody(
-  tabItem(tabName = "table",
-          dataTableOutput("DataTable"))
+  tabItems(
+    tabItem(tabName = "table",
+            dataTableOutput("DataTable")),
+    
+    tabItem(tabName = "trend",
+            shiny::fluidRow(
+              infoBoxOutput(width = 3, "Max"),
+              infoBoxOutput(width = 3, "Min"),
+              infoBoxOutput(width = 3, "Mean"),
+              
+              # トレンドグラフの描画
+              plotOutput("trendGragh")
+            ))
+    
+  )
 ) ### bodyの最終部分
 
 ## 組み立て ##
