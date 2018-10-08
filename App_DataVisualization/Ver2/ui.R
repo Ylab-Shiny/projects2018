@@ -19,14 +19,21 @@ sidebar <- dashboardSidebar(
   # サイドバーメニュー
   sidebarMenu(
     menuItem("データセット[kW]", tabName = "table", icon = icon("table")),
-    menuItem("トレンドグラフ", tabName = "trend", icon = icon("dashboard"))
+    menuItem("トレンドグラフ", tabName = "trend", icon = icon("dashboard"),
+             badgeLabel = "ロード遅め", badgeColor = "red")
   ),
   
   # 年の選択
   selectInput(inputId = "Years", "表示したい年度を選択してください（複数選択不可）",
               c("2018", "2017", "2016", "2015", "2014", "2012"), multiple = F),
+  # 1行改行
+  br(),
+  
   # カレンダーの出力
   uiOutput("DateRange"),
+  
+  # 1行改行
+  br(),
   
   # 部局選択の出力
   uiOutput("selectDeps")

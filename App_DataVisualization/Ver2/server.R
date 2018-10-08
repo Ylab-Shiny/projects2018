@@ -76,11 +76,12 @@ shinyServer(function(input, output, session){
     ) %>% select(-c(date))
     
     # labelの型をPOSIXctに変換
-    secondData$label <- as.POSIXct(secondData$label, "%Y-%m-%d %H:%M:%S", tz = "Japan")
+    secondData$label <- as.POSIXct(secondData$label, "%Y-%m-%d %H:%M:%S", tz = "GMT")
     
     return(secondData)
     
   }) ### passData2の最終部分
+  
   
   output$selectDeps <- renderUI({
     # 列名labelは必要ないので除外
@@ -96,6 +97,13 @@ shinyServer(function(input, output, session){
     
     return(firstData)
   }) ### passData3の最終部分
+  
+  # ggplot用にデータをgatherで整形しなおす
+  passData4 <- reactive({
+    firstData <- passData3() %>% tidyr::gather(input$theDeps, key = "Deps", value = "P_con")
+    
+    return(firstData)
+  }) ### passData4の最終部分
   
   # データテーブルのアウトプット
   output$DataTable <- renderDataTable({
@@ -114,28 +122,29 @@ shinyServer(function(input, output, session){
   # 全学電力量の最大値をアイコンとして出力
   output$Max <- renderInfoBox({
     
-    infoBox("全学電力量の最大電力[kW]", max(passData2()$`Dep1（全学電力量）`, na.rm = T), color = "red")
+    infoBox("大学全体の最大電力[kW]", max(passData2()$`Dep1（全学電力量）`, na.rm = T), color = "red")
     
   }) ### Maxの最終部分
   
   # 全学電力量の最小値のアイコンとして出力
   output$Min <- renderInfoBox({
     
-    infoBox("全学電力量の最小電力[kW]", min(passData2()$`Dep1（全学電力量）`, na.rm = T), color = "blue")
+    infoBox("大学全体の最小電力[kW]", min(passData2()$`Dep1（全学電力量）`, na.rm = T), color = "blue")
     
   }) ### Minの最終部分
   
   # 全学電力量の平均電力をアイコンとして出力
   output$Mean <- renderInfoBox({
     
-    infoBox("全学電力量の平均電力消費[kW]", as.integer(mean(passData2()$`Dep1（全学電力量）`, na.rm = T)), color = "green")
+    infoBox("大学全体の平均電力消費[kW]", as.integer(mean(passData2()$`Dep1（全学電力量）`, na.rm = T)), color = "green")
     
   }) ### Meanの最終部分
   
   ## トレンドグラフ ###
   output$trendGragh <- renderPlot({
     
-    ggplot(passData2(), aes(x = label, y = `Dep1（全学電力量）`)) + geom_line()
+    ggplot(passData4(), aes(x = label, y = P_con, color = Deps)) + 
+      geom_line() + ylim(0, 4000) + xlab("時間") + ylab("部局毎の電力消費[kW]") + ggtitle("トレンドグラフ")
     
     }) ### trendGraghの最終部分
   
