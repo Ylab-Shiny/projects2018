@@ -20,7 +20,9 @@ sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("データセット[kW]", tabName = "table", icon = icon("table")),
     menuItem("トレンドグラフ", tabName = "trend", icon = icon("dashboard"),
-             badgeLabel = "ロード遅め", badgeColor = "red")
+             badgeLabel = "ロード遅め", badgeColor = "red"),
+    menuItem("カレンダープロット",tabuname = "calendar", icon("calendar"))
+    
   ),
   
   # 年の選択

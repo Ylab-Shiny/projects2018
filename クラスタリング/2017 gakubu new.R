@@ -10,6 +10,12 @@ library(readr)
 #class(Dataset[137,8])
 #Dataset[820,8] <- Dataset[820-168,8]
 
+## データの読み込み ##
+user <- Sys.getenv("USERPROFILE")
+path <- "\\Dropbox\\Yamaha-lab\\0_semi\\2018Temp\\clustering\\one year data\\"
+datapath <- paste0(user, path, "2017nenn_corr.csv")
+Dataset <- read_csv(datapath, col_names = F, skip = 1)
+
 Dataset[Dataset$X2 > 6000, 2] <- Dataset[which(Dataset$X2 > 6000)-168,2]
 Dataset[Dataset$X3 > 6000,3] <- Dataset[which(Dataset$X3 > 6000)-168,3]
 x <- Dataset$X2+ Dataset$X3
