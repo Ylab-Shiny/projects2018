@@ -149,3 +149,4 @@ shinyServer(function(input, output, session){
     }) ### trendGraghの最終部分
   
 }) ###  shinyServerの最終部分
+
