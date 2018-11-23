@@ -58,11 +58,11 @@ xxx <- ddply(xxx, .(Month), transform, WeekN = 1 + week - min(week))
 pp <- ggplot(xxx, aes(Week, WeekN, fill = Clust))
 ppp   <- pp + geom_tile(color="gray")+   facet_wrap(~ Month, ncol = 2, dir = "v") + scale_y_reverse()
 
-output$RenderPlot　# ここに記述しても意味がない！Shinyサーバーの中に入れるように！！！！
+# ここに記述しても意味がない！Shinyサーバーの中に入れるように！！！！
 
 # Shinyサーバー
 shinyServer(function(input, output, session) {
   output$RenderPlot <- renderPlot({
     print(ppp)
-  })
+  }) ### RenderPlotの最終部分
 })

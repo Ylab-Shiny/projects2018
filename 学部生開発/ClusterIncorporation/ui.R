@@ -1,21 +1,12 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
 
-# Define UI for application that draws a histogram
+# Shinyのユーザーインターフェース
 shinyUI(fluidPage(
   
-  # Application title
+  # アプリのタイトル
   titlePanel("クラスタリングの！下請け"),
   
-  # Sidebar with a slider input for number of bins 
+  # サイドバー 
   sidebarLayout(
     sidebarPanel(
        sliderInput("bins",
@@ -25,9 +16,9 @@ shinyUI(fluidPage(
                    value = 30)
     ),
     
-    # Show a plot of the generated distribution
+    # メインパネル
     mainPanel(
-       plotOutput("distPlot")
+       plotOutput("RenderPlot")
     )
   )
 ))
