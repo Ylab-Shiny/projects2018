@@ -51,4 +51,5 @@ xxx$Week <- factor(xxx$Week,  labels = c("日", "月", "火", "水", "木", "金
 xxx$week <- as.numeric(format(cal.mat$Date, "%m%U"))
 xxx <- ddply(xxx, .(Month), transform, WeekN = 1 + week - min(week))
 pp <- ggplot(xxx, aes(Week, WeekN, fill = Clust))
-pp + geom_tile(color="gray")+   facet_wrap(~ Month, ncol = 2, dir = "v") + scale_y_reverse()
+ppp   <- pp + geom_tile(color="gray")+   facet_wrap(~ Month, ncol = 2, dir = "v") + scale_y_reverse()
+
