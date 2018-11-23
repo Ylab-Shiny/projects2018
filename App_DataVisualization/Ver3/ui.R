@@ -21,8 +21,8 @@ sidebar <- dashboardSidebar(
     menuItem("データセット[kW]", tabName = "table", icon = icon("table")),
     menuItem("トレンドグラフ", tabName = "trend", icon = icon("dashboard"),
              badgeLabel = "ロード遅め", badgeColor = "red"),
-    menuItem("カレンダープロット",tabuname = "calendar", icon("calendar"))
-    
+    menuItem("カレンダープロット",tabuname = "calendar", icon("calendar-alt")),
+    menuItem("クラスタリング", tabName = "cluste", icon = icon("apple"))
   ),
   
   # 年の選択
@@ -62,7 +62,8 @@ body <- dashboardBody(
               
               # トレンドグラフの描画
               plotOutput("trendGragh")
-            ))
+            )),
+    tabItem(tabName = "cluste",plotOutput("qqq"))
     
   )
 ) ### bodyの最終部分

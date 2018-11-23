@@ -18,7 +18,8 @@ shinyUI(fluidPage(
     
     # メインパネル
     mainPanel(
-       plotOutput("RenderPlot")
+       plotOutput("RenderPlot"),
+       plotOutput("qqq")
     )
   )
 ))
