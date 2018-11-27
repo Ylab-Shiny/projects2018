@@ -9,6 +9,7 @@ library(knitr)
 library(rmarkdown)
 library(shinyBS)
 library(plyr)
+library(data.table) # 追加　2018/11/27
 
 ######## パッケージが重複することの無いように！！！！！ #################################
 
@@ -59,7 +60,6 @@ xxx <- ddply(xxx, .(Month), transform, WeekN = 1 + week - min(week))
 pp <- ggplot(xxx, aes(Week, WeekN, fill = Clust))
 ppp   <- pp + geom_tile(color="gray")+   facet_wrap(~ Month, ncol = 2, dir = "v") + scale_y_reverse()
 
-kmean.y$centers
 tr <- t(kmean.y$centers)
 me <- melt(tr)
 #me   Var1 Var2    value
