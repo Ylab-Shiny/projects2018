@@ -3,8 +3,15 @@ library(shiny)
 # Shinyのユーザーインターフェース
 shinyUI(fluidPage(
   
+  
   # アプリのタイトル
   titlePanel("クラスタリングの！下請け"),
+  
+  # ファイルのアップロードUI
+  fileInput("file", "csvファイルをアップロードしてください",
+            accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv")),
+  
+  
   
   # サイドバー 
   sidebarLayout(
@@ -18,8 +25,9 @@ shinyUI(fluidPage(
     
     # メインパネル
     mainPanel(
-       plotOutput("RenderPlot"),
+       plotOutput("CalenderPlot"),
        plotOutput("qqq")
     )
   )
 ))
+
