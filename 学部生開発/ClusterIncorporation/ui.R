@@ -25,8 +25,8 @@ shinyUI(fluidPage(
     
     # メインパネル
     mainPanel(
-       plotOutput("CalenderPlot"),
-       plotOutput("qqq")
+      dataTableOutput("Data_calender"),
+      plotOutput("CalenderPlot")
     )
   )
 ))
