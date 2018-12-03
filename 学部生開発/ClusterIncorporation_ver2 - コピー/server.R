@@ -33,7 +33,7 @@ shinyServer(function(input, output, session) {
     return(firstData)
   }) ### initDataの最終部分
   
-  ## カレンダープロット用のデータ ##
+  ###################################################### カレンダープロット↓ ################################################
   Data_calender <- reactive({
     if (!is.null(input$file)) {
       x <- initData()$X2+ initData()$X3
@@ -69,6 +69,34 @@ shinyServer(function(input, output, session) {
     return(xxx)
   }) ### Data_calenderの最終部分
   
+  # Data_calenderの出力
+  output$Data_calender <- renderDataTable({
+    datatable(Data_calender())
+  }) ### output$Data_calenderの最終部分
+  
+  ## カレンダープロット ##
+  Calender <- reactive({
+    if (!is.null(input$file)) {
+      
+      #カレンダープロットの作成
+      pp <- ggplot(Data_calender(), aes(Week, WeekN, fill = Clust))
+      ppp <- pp + geom_tile(color="gray")+   facet_wrap(~ Month, ncol = 2, dir = "v") + scale_y_reverse()
+      
+      print(ppp)
+    } else {
+      print(NULL)
+    }
+    
+  }) ### Calenderの最終部分
+  
+  output$CalenderPlot <- renderPlot({
+    Calender()
+    
+    
+  }) ### CalenderPlotの最終部分
+  
+  #################################### クラスタセンタープロット↓ ###############################################
+  
   Data_qqq <- reactive({
     if (!is.null(input$file)) {
       x <- initData()$X2+ initData()$X3
@@ -82,14 +110,15 @@ shinyServer(function(input, output, session) {
       lab.date <- list(date.day,hour.2016)
       y <- matrix(x[1:nrow(x),],ncol=24,byrow=TRUE,dimnames=lab.date)
       
-      inital.v <- apply(y,2, quantile, seq(0,1,1/6)) %>% as.matrix()
+      inital.v <- apply(y,2, quantile, seq(0,1,1/6))
       
       kmean.y <- kmeans(y, inital.v[2:7,])
+      centers <- kmean.y$centers
     } else {
-      kmean.y <- NULL
+      centers <- NULL
     }
     
-    return(kmean.y)
+    return(centers)
   }) ### Data_qqqの最終部分
   
   
@@ -114,43 +143,21 @@ shinyServer(function(input, output, session) {
     return(mu)
   }) ### Data_qqq2の最終部分
   
-  output$qqq <- renderPlot({
-    qqq <- ggplot(Data_qqq2(),aes(x=Var1,y=value,group=Var2,color=cluster))+geom_line(size=1.2)+
-      theme(axis.text.x = element_text(angle = 90, hjust = 1))
-    
-    
-    print(qqq)
-  })#qqqの最終部分
-  
- 
-  # オリジナルデータの集計の出力
-  output$Data_calender <- renderDataTable({
-    datatable(Data_calender())
-    
+  # Data_qqq2の出力
   output$Data_qqq <- renderDataTable({
-    datatable(Data_qqq())
-  })  
-  }) ### summary_conの最終部分
+    datatable(Data_qqq2())
+  }) ### output$Data_qqqの最終部分
   
-  ## カレンダープロット ##
-  Calender <- reactive({
+  output$qqq <- renderPlot({
     if (!is.null(input$file)) {
+      qqq <- ggplot(Data_qqq2(),aes(x=Var1,y=value,group=Var2,color=cluster))+geom_line(size=1.2)+
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
       
-      #カレンダープロットの作成
-      pp <- ggplot(Data_calender(), aes(Week, WeekN, fill = Clust))
-      ppp <- pp + geom_tile(color="gray")+   facet_wrap(~ Month, ncol = 2, dir = "v") + scale_y_reverse()
       
-      print(ppp)
+      print(qqq)
     } else {
       print(NULL)
     }
-    
-  }) ### Calenderの最終部分
-  
-  output$CalenderPlot <- renderPlot({
-    Calender()
-    
-    
-  }) ### CalenderPlotの最終部分
+  })#qqqの最終部分
   
 })
